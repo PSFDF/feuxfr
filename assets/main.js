@@ -36,7 +36,7 @@ const RiskLayers = {
 
 
 // Initializing the map
-mapboxgl.accessToken = 'pk.eyJ1IjoibHVsdWNteSIsImEiOiJja3luNWp6M2owMGoyMm9uMjdyaXRpZTE0In0.8pl4nBBLEUXBNLiwuAv4pA';
+mapboxgl.accessToken = '';
 
 var map = new mapboxgl.Map({
   container: 'map',
@@ -114,7 +114,7 @@ $(document).ready(function () {
           "layout" : {"visibility": 'none'},
           "source": {
             "type": "raster",
-            "tiles": ["https://tile.openweathermap.org/map/wind_new/{z}/{x}/{y}.png?appid=874718354841f0e0250b4b06a05a971e"],
+            "tiles": ["https://tile.openweathermap.org/map/wind_new/{z}/{x}/{y}.png?appid="],
             "tileSize": 256
           },
           "minzoom": 0,
@@ -127,7 +127,7 @@ $(document).ready(function () {
           "layout" : {"visibility": 'none'},
           "source": {
             "type": "raster",
-            "tiles": ["https://tile.openweathermap.org/map/temp_new/{z}/{x}/{y}.png?appid=874718354841f0e0250b4b06a05a971e"],
+            "tiles": ["https://tile.openweathermap.org/map/temp_new/{z}/{x}/{y}.png?appid="],
             "tileSize": 256
           },
           "minzoom": 0,

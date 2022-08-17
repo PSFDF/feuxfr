@@ -1,6 +1,6 @@
 function sendMessage(nom, lieu, rapport) {
   const request = new XMLHttpRequest();
-  request.open("POST", "https://ptb.discord.com/api/webhooks/1005479700564561940/FzeYlD0Y8B8dCDHw8BIL3EKxfgmPI_pcNqERR0sUjdIThfkKGwHDFIdTFPBwUNE5hM97");
+  request.open("POST", "");
   request.setRequestHeader('Content-type', 'application/json');
   const params = {
     username: "Feux.fr",
@@ -37,7 +37,7 @@ sendreport.onclick = function() {
 
 function sendFeedback(lieu, etat){
   const nrequest = new XMLHttpRequest();
-  nrequest.open("POST", "https://ptb.discord.com/api/webhooks/1005479700564561940/FzeYlD0Y8B8dCDHw8BIL3EKxfgmPI_pcNqERR0sUjdIThfkKGwHDFIdTFPBwUNE5hM97");
+  nrequest.open("POST", "");
   nrequest.setRequestHeader('Content-type', 'application/json');
   const nparams = {
     username: "Feux.fr",
