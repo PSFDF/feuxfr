@@ -1,0 +1,21 @@
+{
+    "name": "Feux.fr",
+    "short_name": "Feux",
+    "display": "fullscreen",
+    "orientation": "portrait",
+    "start_url": "https://feux.fr",
+    "scope": "https://feux.fr",
+    "background_color": "#191a1a",
+    "theme_color": "#191a1a",
+    "lang": "fr",
+    "icons": [{
+         "src": "img/pwa_192.png",
+         "sizes": "192x192",
+         "type": "image/png"
+     },
+     {
+        "src": "img/pwa_512.png",
+        "sizes": "512x512",
+        "type": "image/png"
+    }]
+ }

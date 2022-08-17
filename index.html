@@ -1,0 +1,173 @@
+<html lang="fr">
+<head>
+    <title>Feux.fr | Carte des feux en direct</title>
+    <link rel="shortcut icon" href="img/icon.svg">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="manifest" href="assets/pwa_manifest.json">
+    <link rel="apple-touch-icon" href="img/pwa_512.png">
+    <meta name="apple-mobile-web-app-title" content="Feux"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <link rel="apple-touch-startup-image" href="img/ios_splash.png">
+    <meta name="robots" content="noindex">
+    <meta name="language" content="FR">
+    <meta name="coverage" content="France">
+    <meta name="description" content="Feux.fr est une carte mise à jour en temps réel, présentant les feux de forêt en France et leur évolution." />	
+    <meta name="og:title" content="Feux.fr | Carte des feux en direct"/>
+    <meta name="og:type" content="website"/>
+    <meta name="og:url" content="https://www.feux.fr/"/>
+    <meta name="og:image" content="http://ia.media-imdb.com/rock.jpg"/>
+    <meta property="og:locale" content="fr_FR" />
+    <meta name="og:site_name" content="Feux.fr"/>
+    <meta name="og:description" content="Carte mise à jour en temps réel, présentant les feux de forêt en France et leur évolution."/>
+
+    <link rel="dns-prefetch" href="https://docs.google.com">
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.css' rel='stylesheet' />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
+    <script src='https://npmcdn.com/csv2geojson@latest/csv2geojson.js'></script>
+    <script src='https://npmcdn.com/@turf/turf/turf.min.js'></script>  
+    
+    <link rel="stylesheet" href="assets/style.css"/> 
+</head>
+<body>
+
+<div id="load-scr">
+  <img id="load-scr-img" src="img/fire.png"/>
+  <a id="load-scr-warn">Ce site n'est ni approuvé, ni endossé par les autorités locales</a>
+</div>
+
+    <div class="header">
+      <div class="header-left">
+        <img class="logo" src="img/fire.png" alt="Logo de feux.fr">
+        <a href="#logo">Feux.fr</a>
+      </div>
+        <div class="header-right">
+          <a class="active" href="#accueil">Accueil</a>
+          <a href="#signaler" id="openReport">Signaler</a>
+          <a href="#a_propos" id="openAbout">À propos</a>
+        </div>
+      </div>
+
+      <div class="pop-report-bkg" id="reportModal">
+        <div class="pop-report-content">
+          <span class="closeBtn" id="closeRepBtn">&times;</span>
+          <h1>🚒 Envoyer une information</h1>
+          <p>Vous pouvez contribuer à l'information en signalant un évenement (départ de feu, feu fixé, erreurs...) à l'Association Prévention et Signalement Feux de Forêt.</p>
+          <p>Chaque information que nous reçevons est vérifiée avant publication.<br>Tout abus ou envoie de faux entrainera un blocage définitif.</p>
+          <table id='tblinf'>
+            <tr>
+              <th scope="col"><label for="name">Votre pseudo : </label></th>
+              <th scope="col"><input type="text" name="name" id="name" placeholder="Pour être crédité"></th>
+            </tr>
+            <tr>
+              <th scope="col"><label for="name">Lieu concerné : </label></th>
+              <th scope="col"><input type="text" name="location" id="location" required placeholder="Ville, commune, hameau..."></th>
+            </tr>
+            <tr>
+              <th scope="col"><label for="name">Description : </label></th>
+              <th scope="col"><input type="text" name="desc" id="desc" placeholder="Pensez à inclure des détails"></th>
+            </tr>
+            <tr>
+              <th scope="col"></th>
+              <th scope="col"><button id="sendreport">Envoyer</button></th>
+            </tr>
+          </table>
+          <p id="greetsent">Merci pour votre aide !</p>
+        </div>
+      </div>
+
+      <div class="pop-about-bkg" id="aboutModal">
+        <div class="pop-about-content">
+          <span class="closeBtn" id="closeBtn">&times;</span>
+          <h1>🚒 À propos de Feux.fr</h1>
+          <h3>Le projet</h3>
+          <p>
+            Ce site web a été développé par Lulucmy pour l'association Prévention et Signalement Feu de Forêt. Il a vocation à répertorier tous les feux de forêt en direct et leur évolution dans le temps.<br>
+          </p>
+          <h3>Sources des informations</h3>
+          <p>
+            Nos informations proviennent de sources fiables et sont traitées au cas par cas, ce qui nous garantit une information en temps réel.<br>
+            Nous nous appuyons majoritairement sur les informations des préfectures de chaque département et des SDIS.<br>
+            Les images proviennent de Twitter, et nous nous engageons à créditer l'auteur des informations à chaque fois que cela est nécessaire.
+          </p>
+          <h3>Véracité des données</h3>
+          <p>
+            Bien que nous faisions tout notre possible pour récolter des informations pertinentes et précises, il nous est impossible de garantir leur véracité.<br>
+          <p>
+          <h3>Participation des utilisateurs</h3>
+          <p>
+            Sur chaque fiche d'information d'un feu se trouve un bouton "En cours" (l'information est correcte et le feu continue) et un bouton "Fixé" (lorsque l'axe de propagation du feu est arrêté).<br>
+            Une validation par plusieurs utilisateurs est nécessaire afin de prendre en compte l'information.  
+          <p>  
+            <span style="color:red; font-weight: bold;">Mise en garde :</span> Les informations que nous affichons ne doivent pas être utilisées dans la vie réelle, à des fins de défense incendie par exemple. <br>
+            En cas d'urgence, composez 112 (numéro d'appel d'urgence européen). Consultez les médias locaux et des sources externes fiables pour votre sécurité.
+          </p>   
+        </div>
+      </div>
+
+      <div class="warn-banner">
+        <p id="w-ban-text">Association Prévention Feu de Forêt | © OpenStreetMap</p>
+      </div>
+
+      <div class='right-pan'>
+        <div class="rp-top">
+          <a class='rp-title'>Bienvenue</a><br>
+          <a id='rp-sub'>sur feux.fr</a>
+          <img class='rp-arrow' src="img/arrow.png" alt="Display/Hide panel button"/>
+          <div class='rp-live'>
+            <div class="dot"></div>
+            <a>DIRECT</a>
+          </div>
+        </div>
+        <div class="rp-content">
+          <img class="rp-img" onerror='this.src="img/default_img.png"' src="img/default_img.png" alt="Image du feu de forêt"/>
+          <span class="rp-imgsrc">Association PSFDF</span>
+          <p id="rp-info">
+            <a id="landinginfos">Sélectionnez un feu sur la carte afin d'obtenir des informations.<br><br>Données fournies par l'association Prévention et Signalement de Feux de Forêt.</a>
+            <a id="datesignalement" style="display:none;"></a>
+            <a id="moyensengages" style="display:none;"></a>
+            <a id="surfacebrulee" style="display:none;"></a>
+            <a id="conditionmeteo" style="display:none;"></a>
+            <a id="autresinfos" style="display:none;"></a>
+            <a id="nodatayet" style="display:none;"></a>
+          </p>
+        </div>
+        <div class="rp-buttons">
+          <a href="#" id="rp-b-act">Actif</a>
+          <a href="#" id="rp-b-inact">Éteint</a>
+        </div>
+      </div>
+    
+    <div class="gen-lp wind-lay-pan">
+      <label class="layswitch">
+        <input id="windswitch" type="checkbox">
+        <span class="layslider"></span>
+      </label>      
+      <a id="lay-pan-txt">Vitesse du vent</a>
+    </div>
+    <div class="gen-lp risk-lay-pan">
+      <label class="layswitch">
+        <input id="riskswitch" type="checkbox" checked>
+        <span class="layslider"></span>
+      </label>      
+      <a id="lay-pan-txt">Risque incendie</a>
+    </div>
+    <div class="gen-lp temp-lay-pan">
+      <label class="layswitch">
+        <input id="tempswitch" type="checkbox">
+        <span class="layslider"></span>
+      </label>      
+      <a id="lay-pan-txt">Température</a>
+    </div>
+    <img src="img/temp-bar.svg" class="windtempbar" id="tempbar" alt="Seuils température"/>
+    <img src="img/wind-bar.svg" class="windtempbar" id="windbar" alt="Seuils vent"/>
+    <div id='map'></div>
+    <script src='assets/main.js'></script>
+    <script src='assets/layerswitch.js'></script>
+    <script src='assets/sendreport.js'></script>
+    <script src='assets/modals.js'></script>
+    <script src='assets/mobile.js'></script>
+</body>
+</html>
