@@ -14,4 +14,4 @@
 
 ## Contributions
 
-Ce site web est un modeste projet étudiant, toute contribution est la bienvenue.
+Ce site web est un petit projet étudiant, toute contribution est la bienvenue.
